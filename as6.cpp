@@ -3,210 +3,242 @@ using namespace std;
 #define vvi vector<vector<int>>
 #define vi vector<int>
 #define ll long long
-class Node{
-    private:
-        int data;
-        Node* nxt=nullptr;
-    public :
-        Node(int val){
-            data=val;
+#include "sttack.h"
+void bs(){
+    cout<<"Enter Bracket Sequence";
+    string s;
+    cin>>s;
+    int n=s.size();
+    st<char> a;
+    for(auto x: s){
+        if(x=='('||x=='{'||x=='['){
+            a.push(x);
         }
-    friend class Linked_List;
-};
-class Linked_List{
-    public: 
-        int sz=0;
-        Node* head=nullptr;
-        Linked_List();
-        Linked_List(Node* a){
-            head=a;
-            sz++;
-        }
-        void display(){
-            Node *t=head;
-            for(int i=1;i<=sz;i++){
-                cout<<t->data<<" ";
-                t=t->nxt;
+        else{
+            if(x==')'){
+                if('('==a.peek()){
+                    a.pop();
+                }
+                else{
+                    cout<<"Not Correct";
+                    return ;
+                }
             }
-        }
-        void searchbyval(int val){
-            Node* temp=head;
-            if(temp->data==val){
-                cout<<1<<"\n";
+            else if(x==']'){
+                if('['==a.peek()){
+                    a.pop();
+                }
+                else{
+                    cout<<"Not Correct";
+                    return ;
+                }
             }
-            for(int i=2;i<=sz;i++){
-                temp=temp->nxt;
-                if(temp->data==val){
-                    cout<<i<<"\n";
+            else if(x=='}'){
+                if('{'==a.peek()){
+                    a.pop();
+                }
+                else{
+                    cout<<"Not Correct";
+                    return ;
                 }
             }
         }
-        void searchbypos(int pos){
-            Node *temp=head;
-            if(pos==1){
-                cout<<temp->data;
-            }
-            for(int i=2;i<=pos;i++){
-                temp=temp->nxt;
-            }
-            cout<<temp->data<<"\n";
-        }
-        void insert(int pos, Node *a){
-            Node* temp=head;
-            this->sz++;
-            if(pos==1){
-                a->nxt=head;
-                head=a;
-                return;
-            }
-            for(int i=2;i<=pos-1;i++){
-                temp=temp->nxt;
-            }
-            a->nxt=temp->nxt;
-            temp->nxt=a;
-        }
-        void insert(int pos, int val){
-            Node* temp=head;
-            this->sz++;
-            Node *a=new Node(val);
-            if(pos==1){
-                a->nxt=head;
-                head=a;
-                return;
-            }
-            for(int i=2;i<=pos-1;i++){
-                temp=temp->nxt;
-            }
-            a->nxt=temp->nxt;
-            temp->nxt=a;
-        }
-        void delbyval(int val){
-            Node* temp=head;
-            if(temp->data==val){
-                head=temp->nxt;
-                temp->nxt=nullptr;
-                sz--;
-                return;
-            }
-            for(int i=2;i<=sz-1;i++){
-                temp=temp->nxt;
-                if(temp->nxt->data==val){
-                    temp->nxt=temp->nxt->nxt;
-                    temp->nxt->nxt=nullptr;
-                    sz--;
-                    return;
-                }
-            }
-            cout<<"Not found\n";
-        }
-        void delbypos(int pos){
-            Node* temp=head;
-            if(pos==1){
-                head=temp->nxt;
-                temp->nxt=nullptr;
-                sz--;
-                return;
-            }
-            for(int i=2;i<=pos-1;i++){
-                temp=temp->nxt;
-            }
-            sz--;
-            temp->nxt=temp->nxt->nxt;
-            return;
-        }
-        void rev(){
-            if(sz==1)return;
-            Node *t1=head;
-            if(sz==2){
-                t1=t1->nxt;
-                t1->nxt=head;
-                head=t1;
-                return;
-            }
-            Node *t2=t1->nxt;
-            for(int i=1;i<=sz-1;i++){
-                Node *t3=t2->nxt;
-                t2->nxt=t1;
-                t1=t2;
-                t2=t3;
-            }
-            head=t1;
-        }
-        void sort(){
-            for(int i=1;i<=sz-1;i++){
-                Node* temp=head;
-                for(int j=1;j<=sz-i;j++){
-                    if(temp->data > temp->nxt->data){
-                        swap(temp->data,temp->nxt->data);
-                    }
-                    temp=temp->nxt;
-                }
-            }
-        }
-};
-signed main(){
-    cout<<"Enter size of Linked List\n";
-    int n;
-    cin>>n;
-    cout<<"Enter Elements\n";
-    int x;
-    cin>>x;
-    Node* t=new Node(x);
-    Linked_List a(t);
-    for(int i=2;i<=n;i++){
-        cin>>x;
-        a.insert(i,x);
     }
-    x=1;
-    while(x>0){
-        cout<<"\nDOUBLY LINKED LIST OPERATION\n";
-        cout<<"1.Display\n";
-        cout<<"2.Search by value\n";
-        cout<<"3.Search by position\n";
-        cout<<"4.Insert value at given position\n";
-        cout<<"5.Delete by position\n";
-        cout<<"6.Delete by value\n";
-        cout<<"7.Reverse Linked List\n";
-        cout<<"8.Sort Linked List\n";
+    if(a.size()>0){
+        cout<<"Not Correct";
+    }
+    else cout<<"Correct ";
+}
+void con(){
+    cout<<"Enter expression to convert to postfix";
+    string s;
+    cin>>s;
+    st<char> b;
+    int a[257]={0};
+    a['+']=1;
+    a['-']=1;
+    a['*']=2;
+    a['/']=2;
+    a['%']=2;
+    a['^']=3;
+    a['(']=5;
+    char ch[]={'+', '-', '*', '/', '%', '^', '(', ')'};
+    for(auto x: s){
+        bool f=0;
+        for(auto xx: ch){
+            if(x==xx){
+                f=1;
+                break;
+            }
+        }
+        if(f){
+            if(b.isEmpty())b.push(x);
+            else{
+                if(x==')'){
+                    while(b.peek()!='('){
+                        cout<<b.peek();
+                        b.pop();
+                    }
+                    b.pop();
+                    continue;
+                }
+                else if(x=='^'){
+                    while(b.size()&&b.peek()!='('&&a[b.peek()]>a[x]){
+                        cout<<b.peek();
+                        b.pop();
+                    }
+                    b.push(x);
+                    continue;
+                }
+                while(b.size()&&b.peek()!='('&&a[b.peek()]>=a[x]){
+                    cout<<b.peek();
+                    b.pop();
+                }
+                b.push(x);
+            }
+        }
+        else{
+            cout<<x;
+        }
+    }
+    while(!b.isEmpty()){
+        cout<<b.pop();
+    }
+}
+void eval(){
+    cout<<"Enter postfix expression to evaluate\n";
+    string s;
+    cin>>s;
+    st<int> b;
+    int a[257]={0};
+    a['+']=1;
+    a['-']=1;
+    a['*']=2;
+    a['/']=2;
+    a['%']=2;
+    a['^']=3;
+    a['(']=5;
+    char ch[]={'+', '-', '*', '/', '%', '^', '(', ')'};
+    for(auto x: s){
+        bool f=0;
+        int j=-1;
+        for(int i=0;i<8;i++){
+            if(x==ch[i]){
+                f=1;
+                j=i;
+                break;
+            }
+        }
+        // for(auto y: b)cout<<y<<" ";
+        //cout<<"\n";
+        if(f){
+            int bb=b.pop();
+            int aa=b.pop();
+            int c;
+            //cout<<aa<<" "<<bb<<" "<<j<<"\n ";
+            if(j==0){
+                c=aa+bb;
+            }
+            else if(j==1){
+                c=aa-bb;
+            }
+            else if(j==2){
+                c=aa*bb;
+            }
+            else if(j==3){
+                c=aa/bb;
+            }
+            else if(j==4){
+                c=aa%bb;
+            }
+            else{
+                c=pow(aa,bb);
+            }
+            b.push(c);
+        }
+        else{
+            b.push(x-'0');
+        }
+    }
+    cout<<b.pop();
+}
+void coi(){
+    cout<<"Enter expression to convert to prefix";
+    string s;
+    cin>>s;
+    reverse(s.begin(), s.end());
+    st<char> b;
+    int a[257]={0};
+    a['+']=1;
+    a['-']=1;
+    a['*']=2;
+    a['/']=2;
+    a['%']=2;
+    a['^']=3;
+    a[')']=5;
+    string ans="";
+    char ch[]={'+', '-', '*', '/', '%', '^', '(', ')'};
+    for(auto x: s){
+        bool f=0;
+        for(auto xx: ch){
+            if(x==xx){
+                f=1;
+                break;
+            }
+        }
+        if(f){
+            if(b.isEmpty())b.push(x);
+            else{
+                if(x=='('){
+                    while(b.peek()!=')'){
+                        ans+=b.pop();
+                    }
+                    b.pop();
+                    continue;
+                }
+                else if(x=='^'){
+                    while(b.size()&&b.peek()!=')'&&a[b.peek()]>a[x]){
+                        ans+=b.pop();
+                        
+                    }
+                    b.push(x);
+                    continue;
+                }
+                while(b.size()&&b.peek()!=')'&&a[b.peek()]>=a[x]){
+                    ans+=b.pop();
+                }
+                b.push(x);
+            }
+        }
+        else{
+            ans+=x;
+        }
+    }
+    while(!b.isEmpty()){
+        ans+=b.pop();
+    }
+    reverse(ans.begin(), ans.end());
+    cout<<ans;
+}
+signed main(){
+    while(1){
+        cout<<"\n||||  ENTER OPTION  ||||\n1.Bracket Expression\n2.Convert Infix to Postfix\n3.Evaluate Postfix\n4.Infix to Prefix\n5.Exit";
+        int x;
         cin>>x;
         if(x==1){
-            a.display();
+            bs();
         }
         else if(x==2){
-            cout<<"Enter value\n";
-            int tt;
-            cin>>tt;
-            a.searchbyval(tt);
+            con();
         }
         else if(x==3){
-            cout<<"Enter position\n";
-            int tt;
-            cin>>tt;
-            a.searchbypos(tt);
+            eval();
         }
         else if(x==4){
-            cout<<"Enter value and position respectively\n";
-            int tt,ttt;
-            cin>>tt>>ttt;
-            a.insert(ttt,tt);
+            coi();
         }
-        else if(x==5){
-            cout<<"Enter position\n";
-            int tt;
-            cin>>tt;
-            a.delbypos(tt);
-        }
-        else if(x==6){
-            cout<<"Enter value\n";
-            int tt;
-            cin>>tt;
-            a.delbyval(tt);
-        }
-        else if(x==7){
-            a.rev();
-        }
-        else if(x==8){
-            a.sort();
+        else{
+            break;
         }
     }
 }      

@@ -32,23 +32,31 @@ class Linked_List{
             }
         }
         void searchbyval(int val){
+            if(sz==0){
+                cout<<"Not possible\n";
+                return;
+            }
             Node* temp=head;
             if(temp->data==val){
                 cout<<1<<"\n";
+                return;
             }
             for(int i=2;i<=sz;i++){
                 temp=temp->nxt;
                 if(temp->data==val){
                     cout<<i<<"\n";
+                    return;
                 }
             }
+            cout<<"Not Found\n";
         }
         void searchbypos(int pos){
             Node *temp=head;
             if(pos==1){
                 cout<<temp->data;
+                return;
             }
-            if(pos>sz){
+            if(pos>sz||pos<1||head==nullptr){
                 cout<<"Not possible\n";
                 return;
             }
@@ -66,6 +74,10 @@ class Linked_List{
                 head=a;
                 return;
             }
+            if(pos>sz||sz==0){
+                cout<<"Not possible\n";
+                return;
+            }
             for(int i=2;i<=pos-1;i++){
                 temp=temp->nxt;
             }
@@ -74,18 +86,22 @@ class Linked_List{
         }
         void delbyval(int val){
             Node* temp=head;
+            Node* tt=head;
             if(temp->data==val){
                 head=temp->nxt;
-                temp->nxt=nullptr;
+                delete temp;
                 sz--;
+                
                 return;
             }
             for(int i=2;i<=sz-1;i++){
                 temp=temp->nxt;
                 if(temp->nxt->data==val){
+                    tt=temp->nxt;
                     temp->nxt=temp->nxt->nxt;
-                    temp->nxt->nxt=nullptr;
+                    delete tt;
                     sz--;
+                    
                     return;
                 }
             }
@@ -93,24 +109,32 @@ class Linked_List{
         }
         void delbypos(int pos){
             Node* temp=head;
+            Node *tt=head;
             if(pos==1){
                 head=temp->nxt;
                 temp->nxt=nullptr;
                 sz--;
+                
+                return;
+            }
+            if(pos>sz||pos<1||head==nullptr){
+                cout<<"Not possible\n";
                 return;
             }
             for(int i=2;i<=pos-1;i++){
                 temp=temp->nxt;
             }
-            sz--;
+            tt=temp->nxt;
             temp->nxt=temp->nxt->nxt;
-            return;
+            delete tt;
+            sz--;
         }
         void rev(){
             if(sz==1)return;
             Node *t1=head;
             if(sz==2){
                 t1=t1->nxt;
+                head->nxt=nullptr;
                 t1->nxt=head;
                 head=t1;
                 return;
@@ -126,12 +150,26 @@ class Linked_List{
         }
         void sort(){
             for(int i=1;i<=sz-1;i++){
+                Node* prev=nullptr;
                 Node* temp=head;
                 for(int j=1;j<=sz-i;j++){
+                    Node* next=temp->nxt;
                     if(temp->data > temp->nxt->data){
-                        swap(temp->data,temp->nxt->data);
+                        if(prev==nullptr){
+                            head=next;
+                        }
+                        else{
+                            prev->nxt=next;
+                        }
+                        temp->nxt=next->nxt;
+                        next->nxt=temp;
+                        prev=next;
                     }
-                    temp=temp->nxt;
+                    else{
+                        prev=temp;
+                        temp=temp->nxt;
+                    }
+                    
                 }
             }
         }
