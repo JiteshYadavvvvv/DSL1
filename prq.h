@@ -8,7 +8,7 @@ using namespace std;
 //       3* 4* 5* 6*
 class prq{
     private:
-        int a[100]={0};
+        int a[100]={100};
         int p=0;
     public:
         void insert(int val){
